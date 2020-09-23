@@ -84,7 +84,7 @@ describe(`Shopping List Service object`, function() {
       return ShoppingListService.deleteItem(db, id)
         .then(() => ShoppingListService.getAllItems(db))
         .then(allItems => {
-          expect(allItems).to.eql(allItems.filter(itemId => id !== itemId))
+          expect(allItems).to.eql(testItems.filter(item => item.id !== id))
         })
     })
 
