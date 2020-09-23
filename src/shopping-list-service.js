@@ -12,6 +12,17 @@ const ShoppingListService = {
         return rows[0]
       })
   },
+  getById(db, id) {
+    return db('shopping_list')
+      .select('*')
+      .where('id', id)
+      .first();
+  },
+  updateItem(db, id, newItemData) {
+    return db('shopping_list')
+      .where({ id })
+      .update(newItemData);
+  }
 };
 
 module.exports = ShoppingListService;

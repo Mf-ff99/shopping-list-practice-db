@@ -60,6 +60,25 @@ describe(`Shopping List Service object`, function() {
         });
     });
 
+    it(`'updateItem()' updates the item as expected`, () => {
+      const id = 1;
+      const newItemData = {
+        name: 'New Name',
+        price: "48.99",
+        date_added: new Date('2020-09-22T21:17:20.463Z'),
+        checked: true,
+        category: 'Main'
+      }
+      return ShoppingListService.updateItem(db, id, newItemData)
+        .then(() => ShoppingListService.getById(db, id))
+        .then(item => {
+          expect(item).to.eql({
+            id: id,
+            ...newItemData
+          })
+        })
+    });
+
   });
 
   context(`'shopping_list' has no data`, () => {
@@ -78,16 +97,21 @@ describe(`Shopping List Service object`, function() {
         category: 'Snack'
       }
       return ShoppingListService.insertItem(db, newItem)
-          .then(actual => {
-            expect(actual).to.eql({
-              id: 1,
-              name: newItem.name,
-              price: newItem.price,
-              date_added: newItem.date_added,
-              checked: newItem.checked,
-              category: newItem.category
-            })
-          })
-    })
+        .then(actual => {
+          expect(actual).to.eql({
+            id: 1,
+            name: newItem.name,
+            price: newItem.price,
+            date_added: newItem.date_added,
+            checked: newItem.checked,
+            category: newItem.category
+          });
+          return db('shopping_list')
+            .select()
+            .where({ id: actual.id })
+            .first()
+            .then(item => expect(item).to.exist);
+        });
+    });
   });
 });
