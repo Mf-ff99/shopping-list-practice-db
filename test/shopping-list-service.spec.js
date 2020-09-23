@@ -79,6 +79,30 @@ describe(`Shopping List Service object`, function() {
         })
     });
 
+    it(`deleteItem() deletes item as expected`, () => {
+      const id = 1;
+      return ShoppingListService.deleteItem(db, id)
+        .then(() => ShoppingListService.getAllItems(db))
+        .then(allItems => {
+          expect(allItems).to.eql(allItems.filter(itemId => id !== itemId))
+        })
+    })
+
+    it(`getById() returns the element with matching id`, () => {
+      const id = 2
+      const testItem = testItems[id - 1]
+      return ShoppingListService.getById(db, id)
+        .then(actual => {
+          expect(actual).to.eql({
+            id: id,
+            name: testItem.name,
+            price: testItem.price,
+            date_added: testItem.date_added,
+            checked: testItem.checked,
+            category: testItem.category
+          })
+        })
+    })
   });
 
   context(`'shopping_list' has no data`, () => {

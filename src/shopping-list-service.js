@@ -22,7 +22,12 @@ const ShoppingListService = {
     return db('shopping_list')
       .where({ id })
       .update(newItemData);
-  }
+  },
+  deleteItem(db, id) {
+    return db('shopping_list')
+      .where({ id })
+      .delete();
+  },
 };
 
 module.exports = ShoppingListService;
