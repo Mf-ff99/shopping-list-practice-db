@@ -1,6 +1,7 @@
 require('dotenv').config();
 const ShoppingListService = require('../src/shopping-list-service');
 const knex = require('knex');
+const { expect } = require('chai');
 
 describe(`Shopping List Service object`, function() {
   let db;
@@ -68,6 +69,25 @@ describe(`Shopping List Service object`, function() {
           expect(actual).to.eql([]);
         });
     });
+    it(`insertItem() should insert item and resolve it with id`, () => {
+      const newItem = {
+        name: 'toys',
+        price: "2.99",
+        date_added: new Date('2020-09-20T21:17:20.463Z'),
+        checked: false,
+        category: 'Snack'
+      }
+      return ShoppingListService.insertItem(db, newItem)
+          .then(actual => {
+            expect(actual).to.eql({
+              id: 1,
+              name: newItem.name,
+              price: newItem.price,
+              date_added: newItem.date_added,
+              checked: newItem.checked,
+              category: newItem.category
+            })
+          })
+    })
   });
-
 });
